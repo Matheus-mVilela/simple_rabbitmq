@@ -1,0 +1,28 @@
+version: "3"
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    networks:
+      - main_network
+
+  app:
+    build: .
+    image: app
+    container_name: app
+    ports:
+      - 8000:8000
+    volumes:
+      - .:/app
+    command: [ "sleep", "infinity" ]
+    networks:
+      - main_network
+    depends_on:
+      - rabbitmq
+
+networks:
+  main_network:
+    driver: bridge
